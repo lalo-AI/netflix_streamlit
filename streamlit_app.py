@@ -41,6 +41,13 @@ def loadByTitulo(titulo):
         currentMovies.append(movie.to_dict())
     return currentMovies
 
+def loadByTitulo(titulo):
+    query = dbmovies.where('name', '>=', titulo.lower()).where('name', '<=', titulo.lower() + '\uf8ff').stream()
+    currentMovies = []
+    for movie in query:
+        currentMovies.append(movie.to_dict())
+    return currentMovies
+
 
 #def loadByTitulo(titulo):
 #    currentMovie = None
@@ -54,11 +61,19 @@ tituloSearch = st.sidebar.text_input("Titulo del Filme")
 btnFiltrar = st.sidebar.button("Buscar filmes")
 
 if btnFiltrar:
-    doc = loadByTitulo(tituloSearch.lower())
-    if not doc:
+    movies = loadByTitulo(tituloSearch)
+    if not movies:
         st.sidebar.write("Filme no existe")
     else:
-        st.write(pd.DataFrame(doc))
+        df = pd.DataFrame(movies)
+        st.write(df)
+
+#if btnFiltrar:
+#    doc = loadByTitulo(tituloSearch.lower())
+#    if not doc:
+#        st.sidebar.write("Filme no existe")
+#    else:
+#        st.write(pd.DataFrame(doc))
 
 #if btnFiltrar:
 #    doc = loadByTitulo(tituloSearch)
