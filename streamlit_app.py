@@ -28,54 +28,51 @@ def load_data():
         data.append(doc.to_dict())
     return data
 
+data_load_state = st.text("Done! using (st.cache_data)")
+st.markdown("_____")
 data = load_data()
 
 show_all = sidebar.checkbox("Mostrar todos los filmes")
 if show_all:
     st.dataframe(pd.DataFrame(data))
 
-def loadByTitulo(titulo):
-    query = dbmovies.where('name', '>=', titulo.lower()).where('name', '<=', titulo.lower() + '\uf8ff').stream()
-    currentMovies = []
-    for movie in query:
-        currentMovies.append(movie.to_dict())
-    return currentMovies
 
-
-#def loadByTitulo(titulo):
-#    currentMovie = None
-#    movies_ref = dbmovies.where(u'name', u'==', titulo)
-#    for myMovie in movies_ref.stream():
-#        currentMovie = myMovie
-#    return currentMovie
-
-#st.sidebar.subheader("Titulo del Filme")
-tituloSearch = st.sidebar.text_input("Titulo del Filme")
 btnFiltrar = st.sidebar.button("Buscar filmes")
 
-if btnFiltrar:
-    movies = loadByTitulo(tituloSearch)
-    if not movies:
-        st.sidebar.write("Filme no existe")
+def search_title(tituloSearch):
+    # search_input = sidebar.text_input('Search title:')
+    search_input_lower = tituloSearch.lower()
+    if tituloSearch:
+        st.markdown("_____")
+        filtered_data = [record for record in data if search_input_lower in record['name'].lower()]
+        if filtered_data:
+            st.write("This is the information about the title(s):")
+            df = pd.DataFrame(filtered_data)
+            st.write(df)
+        else:
+            st.write("No titles found.")
     else:
-        df = pd.DataFrame(movies)
-        st.write(df)
+        st.write("Please enter a search title.")
+
+# Button for searching
+tituloSearch = st.sidebar.text_input("Titulo del Filme")
+#tit_lower = tituloSearch.lower()
+search_button = st.sidebar.button('Buscar filmes')
+
+# Call the search_title function when the button is clicked
+if search_button:
+    search_title(tituloSearch)
 
 #if btnFiltrar:
-#    doc = loadByTitulo(tituloSearch.lower())
-#    if not doc:
+#    movies = search_title(tituloSearch)
+#    if not movies:
 #        st.sidebar.write("Filme no existe")
 #    else:
-#        st.write(pd.DataFrame(doc))
+#        df = pd.DataFrame(movies)
+#        st.write(df)
 
-#if btnFiltrar:
-#    doc = loadByTitulo(tituloSearch)
-#    if doc is None:
-#        st.sidebar.write("Filme no existe")
-#    else:
-#        st.sidebar.write(doc.to_dict())
+#...
 
-#data = load_data()
 directors = [record['director'] for record in data]
 selected_director = sidebar.selectbox('Seleccionar Director:', directors)
 
