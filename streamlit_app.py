@@ -36,9 +36,6 @@ show_all = sidebar.checkbox("Mostrar todos los filmes")
 if show_all:
     st.dataframe(pd.DataFrame(data))
 
-
-btnFiltrar = st.sidebar.button("Buscar filmes")
-
 def search_title(tituloSearch):
     # search_input = sidebar.text_input('Search title:')
     search_input_lower = tituloSearch.lower()
@@ -55,9 +52,9 @@ def search_title(tituloSearch):
         st.write("Please enter a search title.")
 
 # Button for searching
-tituloSearch = sidebar.text_input("Titulo del Filme")
+tituloSearch = st.sidebar.text_input("Titulo del Filme")
 #tit_lower = tituloSearch.lower()
-search_button = sidebar.button('Buscar filmes')
+search_button = st.sidebar.button('Buscar filmes')
 
 # Call the search_title function when the button is clicked
 if search_button:
