@@ -55,9 +55,9 @@ def search_title(tituloSearch):
         st.write("Please enter a search title.")
 
 # Button for searching
-tituloSearch = st.sidebar.text_input("Titulo del Filme")
+tituloSearch = sidebar.text_input("Titulo del Filme")
 #tit_lower = tituloSearch.lower()
-search_button = st.sidebar.button('Buscar filmes')
+search_button = sidebar.button('Buscar filmes')
 
 # Call the search_title function when the button is clicked
 if search_button:
