@@ -35,7 +35,7 @@ if show_all:
     st.dataframe(pd.DataFrame(data))
 
 def loadByTitulo(titulo):
-    query = dbmovies.where(u'name', '>=', titulo).where(u'name', '<=', titulo + u'\uf8ff').stream()
+    query = dbmovies.where(u'name', '>=', titulo, field_path=u'name').where(u'name', '<=', titulo + u'\uf8ff', field_path=u'name').stream()
     currentMovies = []
     for movie in query:
         currentMovies.append(movie.to_dict())
