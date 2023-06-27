@@ -41,8 +41,8 @@ def loadByTitulo(titulo):
         currentMovie = myMovie
     return currentMovie
 
-st.sidebar.subheader("Titulo del Filme")
-tituloSearch = st.sidebar.text_input()
+#st.sidebar.subheader("Titulo del Filme")
+tituloSearch = st.sidebar.text_input("Titulo del Filme")
 btnFiltrar = st.sidebar.button("Buscar filmes")
 
 if btnFiltrar:
