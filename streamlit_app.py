@@ -37,13 +37,13 @@ if show_all:
     st.dataframe(pd.DataFrame(data))
 
 def search_title(tituloSearch):
-    # search_input = sidebar.text_input('Search title:')
     search_input_lower = tituloSearch.lower()
     if tituloSearch:
         st.markdown("_____")
         filtered_data = [record for record in data if search_input_lower in record['name'].lower()]
         if filtered_data:
-            st.write("This is the information about the title(s):")
+            num_records = len(filtered_data)
+            st.write(f"Total filmes mostrados: {num_records}")
             df = pd.DataFrame(filtered_data)
             st.write(df)
         else:
@@ -53,20 +53,11 @@ def search_title(tituloSearch):
 
 # Button for searching
 tituloSearch = st.sidebar.text_input("Titulo del Filme")
-#tit_lower = tituloSearch.lower()
 search_button = st.sidebar.button('Buscar filmes')
 
 # Call the search_title function when the button is clicked
 if search_button:
     search_title(tituloSearch)
-
-#if btnFiltrar:
-#    movies = search_title(tituloSearch)
-#    if not movies:
-#        st.sidebar.write("Filme no existe")
-#    else:
-#        df = pd.DataFrame(movies)
-#        st.write(df)
 
 #...
 
@@ -82,8 +73,9 @@ search_button = sidebar.button('Filtrar Director')
 if search_button:
     if selected_director:
         st.markdown("_____")
-        st.write(f"Filmes del director {selected_director}")
         filtered_films = filter_films_by_director(selected_director)
+        num_films = len(filtered_films)
+        st.write(f"Total filmes : {num_films} de : {selected_director}")
         st.dataframe(pd.DataFrame(filtered_films))
     else:
         st.write('Please select a director')
