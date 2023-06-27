@@ -79,3 +79,34 @@ if search_button:
         st.dataframe(pd.DataFrame(filtered_films))
     else:
         st.write('Please select a director')
+
+#...
+
+st.header("Nuevo Filme")
+
+name = sidebar.text_input("Name")
+companies = [record['company'] for record in data]
+selected_company = sidebar.selectbox('Company', companies)
+directors = [record['director'] for record in data]
+selected_director = sidebar.selectbox('Director', directors)
+genre = [record['genre'] for record in data]
+selected_genre = sidebar.selectbox('Genre', genre)
+submit = sidebar.button("Crear nuevo filme")
+
+# Once the name has submitted, upload it to the database
+if name and companies and directors and genre and submit:
+  doc_ref = db.collection("movies").document()
+  doc_ref.set ({
+      "name": name,
+      "company": selected_company,
+      "director": selected_director,
+      "genre": selected_genre
+  })
+  st.sidebar.write("Filme insertado correctamente")
+
+movies_ref = list(db.collection(u'movies').stream())
+movies_dict = list(map(lambda x: x.to_dict(), movies_ref))
+column_order = ["name","company", "director", "genre"]
+movies_dataframe = pd.DataFrame(movies_dict, columns=column_order)
+
+st.dataframe(movies_dataframe)
