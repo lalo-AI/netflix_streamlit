@@ -35,22 +35,36 @@ if show_all:
     st.dataframe(pd.DataFrame(data))
 
 def loadByTitulo(titulo):
-    movies_ref = dbmovies.where(u'name', u'==', titulo)
-    currentMovie = None
-    for myMovie in movies_ref.stream():
-        currentMovie = myMovie
-    return currentMovie
+    query = dbmovies.where(u'name', '>=', titulo).where(u'name', '<=', titulo + u'\uf8ff').stream()
+    currentMovies = []
+    for movie in query:
+        currentMovies.append(movie.to_dict())
+    return currentMovies
+
+#def loadByTitulo(titulo):
+#    currentMovie = None
+#    movies_ref = dbmovies.where(u'name', u'==', titulo)
+#    for myMovie in movies_ref.stream():
+#        currentMovie = myMovie
+#    return currentMovie
 
 #st.sidebar.subheader("Titulo del Filme")
 tituloSearch = st.sidebar.text_input("Titulo del Filme")
 btnFiltrar = st.sidebar.button("Buscar filmes")
 
 if btnFiltrar:
-    doc = loadByTitulo(tituloSearch)
-    if doc is None:
+    doc = loadByTitulo(tituloSearch.lower())
+    if not doc:
         st.sidebar.write("Filme no existe")
     else:
-        st.sidebar.write(doc.to_dict())
+        st.write(pd.DataFrame(doc))
+
+#if btnFiltrar:
+#    doc = loadByTitulo(tituloSearch)
+#    if doc is None:
+#        st.sidebar.write("Filme no existe")
+#    else:
+#        st.sidebar.write(doc.to_dict())
 
 #data = load_data()
 directors = [record['director'] for record in data]
