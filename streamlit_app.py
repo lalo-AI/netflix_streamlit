@@ -58,7 +58,7 @@ def loadByTitulo (titulo):
   return currentMovie
 
 st.sidebar.subheader("Titulo del Filme")
-tituloSearch = st.sidebar.text_input("titulo")
+tituloSearch = st.sidebar.text_input(" ")
 btnFiltrar = st.sidebar.button("Buscar filmes")
 
 if btnFiltrar:
@@ -72,19 +72,24 @@ if btnFiltrar:
 
 # ...
 # Selectbox for director
-selected_director = sidebar.selectbox('Seleeccionar Director:', data['director'].unique())
+# Load the data from Firestore
+data = load_data()
+
+# Extract the 'director' values from the list of dictionaries
+directors = [record['director'] for record in data]
+
+# Selectbox for director
+selected_director = sidebar.selectbox('Seleccionar Director:', directors)
 
 # Function to filter films by director
 def filter_films_by_director(director):
-    filtered_films = data[data['director'] == director]
+    filtered_films = [record for record in data if record['director'] == director]
     return filtered_films
 
 # Command button
 search_button = sidebar.button('Filtrar Director')
 
 # Handling search button click event
-
-
 if search_button:
     if selected_director:
         st.markdown("_____")
@@ -93,4 +98,5 @@ if search_button:
         st.write(filtered_films)
     else:
         st.write('Please select a director')
+
 
