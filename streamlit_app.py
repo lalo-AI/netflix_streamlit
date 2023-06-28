@@ -105,7 +105,8 @@ genre = [record['genre'] for record in data]
 selected_genre = sidebar.selectbox('Genre', genre)
 submit = sidebar.button("Crear nuevo filme")
 
-# Once the name has submitted, upload it to the database
+# Una vez que el nombre se ha enviado se carga la información en la BD
+new_filme = False
 if name and companies and directors and genre and submit:
   doc_ref = db.collection("movies").document()
   doc_ref.set ({
@@ -115,6 +116,7 @@ if name and companies and directors and genre and submit:
       "genre": selected_genre
   })
   st.sidebar.write("Filme insertado correctamente")
+  new_filme = True
 
 # El código recupera todos los documentos de la colección de "movies" en Firestore, 
 # los convierte en diccionarios y luego crea un DataFrame usando los diccionarios 
@@ -123,6 +125,11 @@ movies_ref = list(db.collection(u'movies').stream())
 movies_dict = list(map(lambda x: x.to_dict(), movies_ref))
 column_order = ["name","company", "director", "genre"]
 movies_dataframe = pd.DataFrame(movies_dict, columns=column_order)
+if new_filme:
+  st.write("Este es el último Filme insertado")
+  last_row = movies_dataframe.tail(1)
+  st.dataframe(last_row)
+  movies_dataframe = movies_dataframe.sort_index(ascending=False)
 
 show_filmes = sidebar.checkbox("Mostrar filmes")
 if show_filmes:
