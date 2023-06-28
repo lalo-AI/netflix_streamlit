@@ -34,7 +34,6 @@ def load_data():
     return data
 
 data_load_state = st.text("Done! using (st.cache_data)")
-st.markdown("_____")
 data = load_data()
 
 show_all = sidebar.checkbox("Mostrar todos los filmes")
@@ -47,7 +46,6 @@ if show_all:
 def search_title(tituloSearch):
     search_input_lower = tituloSearch.lower()
     if tituloSearch:
-        st.markdown("_____")
         # Con esto línea de código se asegura la busqueda del flime las cuales estén contenidas en la
         # variable sin importar que sean minúsculas o mayúsculas
         filtered_data = [record for record in data if search_input_lower in record['name'].lower()]
@@ -81,7 +79,6 @@ search_button = sidebar.button('Filtrar Director')
 
 if search_button:
     if selected_director:
-        st.markdown("_____")
         filtered_films = filter_films_by_director(selected_director)
         num_films = len(filtered_films)
         st.write(f"Total filmes : {num_films} Director : {selected_director}")
@@ -118,6 +115,16 @@ if name and companies and directors and genre and submit:
   st.sidebar.write("Filme insertado correctamente")
   new_filme = True
 
+# Fetch the last added document
+if new_filme:
+  last_doc = doc_ref.get()
+  if last_doc.exists:
+    last_record = last_doc.to_dict()
+    st.write("Último filme agregado:")
+    st.write(pd.DataFrame([last_record]))
+  else:
+    st.write("Error: El último filme no se encuntra")
+
 # El código recupera todos los documentos de la colección de "movies" en Firestore, 
 # los convierte en diccionarios y luego crea un DataFrame usando los diccionarios 
 # y un orden de columna específico. 
@@ -125,11 +132,6 @@ movies_ref = list(db.collection(u'movies').stream())
 movies_dict = list(map(lambda x: x.to_dict(), movies_ref))
 column_order = ["name","company", "director", "genre"]
 movies_dataframe = pd.DataFrame(movies_dict, columns=column_order)
-if new_filme:
-  st.write("Este es el último Filme insertado")
-  last_row = movies_dataframe.tail(1)
-  st.dataframe(last_row)
-  movies_dataframe = movies_dataframe.sort_index(ascending=False)
 
 show_filmes = sidebar.checkbox("Mostrar filmes")
 if show_filmes:
