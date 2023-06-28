@@ -91,6 +91,8 @@ if search_button:
 # los campos que de cierta manera no quisiera dejar en blanco si no que de la misma
 # BD el usuario seleccione la compañía, el director y el genero dejando solo abierto
 # el nombre de la pelicula
+
+st.markdown("_____")
 st.header("Nuevo Filme")
 
 name = sidebar.text_input("Name")
@@ -133,6 +135,4 @@ movies_dict = list(map(lambda x: x.to_dict(), movies_ref))
 column_order = ["name","company", "director", "genre"]
 movies_dataframe = pd.DataFrame(movies_dict, columns=column_order)
 
-show_filmes = sidebar.checkbox("Mostrar filmes")
-if show_filmes:
-  st.dataframe(movies_dataframe)
+st.dataframe(movies_dataframe)
