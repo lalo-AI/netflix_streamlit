@@ -135,4 +135,8 @@ movies_dict = list(map(lambda x: x.to_dict(), movies_ref))
 column_order = ["name","company", "director", "genre"]
 movies_dataframe = pd.DataFrame(movies_dict, columns=column_order)
 
-st.dataframe(movies_dataframe)
+show_new_filmes = sidebar.checkbox("Mostrar los nuevos filmes")
+if show_all:
+    st.dataframe(movies_dataframe)
+    st.markdown("_____")
+
